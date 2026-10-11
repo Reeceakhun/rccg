@@ -15,6 +15,7 @@ module.exports = async (req, res) => {
   } catch (e) {
     if (e instanceof Bad) return res.status(400).json({ error: e.message });
     console.error('admin content failed:', e);
-    res.status(500).json({ error: 'Could not save. Check that a Blob store is connected to this project (see README).' });
+    // Only signed-in admins reach this point, so showing the real reason is safe and makes problems easy to diagnose.
+    res.status(500).json({ error: 'Could not save: ' + String((e && e.message) || e).slice(0, 300) });
   }
 };
